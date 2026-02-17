@@ -63,6 +63,44 @@ body {
 }
 .section-sub { font-size: 17px; color: var(--gray-300); max-width: 600px; line-height: 1.7; }
 
+/* ===== SCROLL ANIMATIONS ===== */
+.fade-in {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.fade-in.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+.fade-in-delay-1 { transition-delay: 0.1s; }
+.fade-in-delay-2 { transition-delay: 0.2s; }
+.fade-in-delay-3 { transition-delay: 0.3s; }
+.fade-in-delay-4 { transition-delay: 0.4s; }
+.fade-in-delay-5 { transition-delay: 0.5s; }
+
+/* ===== STICKY CTA ===== */
+.sticky-cta {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 200;
+  opacity: 0;
+  transform: translateY(12px);
+  pointer-events: none;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+.sticky-cta.visible {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+.sticky-cta .btn {
+  padding: 14px 24px;
+  font-size: 14px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.5), 0 4px 16px var(--red-glow);
+}
+
 /* ===== NAV ===== */
 nav {
   position: fixed; top: 0; left: 0; right: 0; z-index: 100;
@@ -130,7 +168,9 @@ nav .btn { padding: 10px 24px; font-size: 14px; }
   background: var(--black-card); border: 1px solid var(--black-border);
   border-radius: 12px; padding: 32px 28px;
   position: relative; overflow: hidden;
+  transition: all 0.25s ease;
 }
+.problem-card:hover { border-color: rgba(224,32,32,0.4); transform: translateY(-3px); box-shadow: 0 12px 40px var(--red-glow); }
 .problem-card::before {
   content: ''; position: absolute; top: 0; left: 0; right: 0;
   height: 3px; background: var(--red);
@@ -150,7 +190,9 @@ nav .btn { padding: 10px 24px; font-size: 14px; }
   display: grid; grid-template-columns: 2fr 1fr 1fr 1fr;
   padding: 16px 28px; border-bottom: 1px solid var(--black-border);
   align-items: center; font-size: 14px;
+  transition: background 0.2s ease;
 }
+.roi-row:not(.roi-header):hover { background: rgba(255,255,255,0.02); }
 .roi-row:last-child { border-bottom: none; }
 .roi-header { background: var(--red); font-weight: 700; font-size: 13px; text-transform: uppercase; letter-spacing: 1px; }
 .roi-header div { color: white; }
@@ -160,15 +202,39 @@ nav .btn { padding: 10px 24px; font-size: 14px; }
 .roi-roi { color: var(--red); font-weight: 800; font-size: 16px; }
 .roi-note { text-align: center; margin-top: 16px; font-size: 14px; color: var(--gray-500); }
 
+/* ROI Cards (mobile) */
+.roi-cards { display: none; margin-top: 40px; }
+.roi-card {
+  background: var(--black-card); border: 1px solid var(--black-border);
+  border-radius: 12px; padding: 20px 20px 18px;
+  position: relative; overflow: hidden;
+  transition: all 0.25s ease;
+}
+.roi-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0;
+  height: 3px; background: var(--red);
+}
+.roi-card:hover { border-color: rgba(224,32,32,0.4); transform: translateY(-2px); box-shadow: 0 8px 32px var(--red-glow); }
+.roi-card-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 14px;
+}
+.roi-card-name { font-size: 15px; font-weight: 700; display: flex; align-items: center; gap: 8px; }
+.roi-card-roi { font-size: 22px; font-weight: 900; color: var(--red); letter-spacing: -0.5px; }
+.roi-card-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.roi-card-stat { background: var(--black-light); border-radius: 8px; padding: 10px 12px; }
+.roi-card-stat-label { font-size: 11px; color: var(--gray-500); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 2px; }
+.roi-card-stat-value { font-size: 13px; font-weight: 600; color: var(--gray-100); }
+
 /* ===== SERVICES ===== */
 .services { padding: 100px 0; background: var(--black-light); }
 .services-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 40px; }
 .service-card {
   background: var(--black-card); border: 1px solid var(--black-border);
   border-radius: 12px; padding: 32px 24px;
-  transition: all 0.2s ease;
+  transition: all 0.25s ease;
 }
-.service-card:hover { border-color: var(--red); }
+.service-card:hover { border-color: var(--red); transform: translateY(-3px); box-shadow: 0 12px 40px var(--red-glow); }
 .service-icon { font-size: 28px; margin-bottom: 14px; }
 .service-card h3 { font-size: 16px; font-weight: 700; margin-bottom: 8px; }
 .service-card p { font-size: 13px; color: var(--gray-300); line-height: 1.7; }
@@ -179,7 +245,9 @@ nav .btn { padding: 10px 24px; font-size: 14px; }
 .step {
   background: var(--black-card); border: 1px solid var(--black-border);
   border-radius: 12px; padding: 36px 28px; position: relative;
+  transition: all 0.25s ease;
 }
+.step:hover { border-color: rgba(224,32,32,0.4); transform: translateY(-3px); box-shadow: 0 12px 40px var(--red-glow); }
 .step-num {
   display: flex; align-items: center; justify-content: center;
   width: 40px; height: 40px; border-radius: 10px;
@@ -227,8 +295,9 @@ nav .btn { padding: 10px 24px; font-size: 14px; }
   background: var(--black-card); border: 2px solid var(--black-border);
   border-radius: 16px; padding: 48px 40px;
   text-align: center; position: relative;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
 }
-.pricing-card:hover { border-color: var(--red); }
+.pricing-card:hover { border-color: var(--red); box-shadow: 0 16px 48px var(--red-glow); }
 .pricing-amount {
   font-size: 56px; font-weight: 900; letter-spacing: -3px; margin-bottom: 4px;
 }
@@ -246,16 +315,35 @@ nav .btn { padding: 10px 24px; font-size: 14px; }
 .faq-list { max-width: 700px; margin: 40px auto 0; }
 .faq-item {
   border-bottom: 1px solid var(--black-border);
-  padding: 24px 0; cursor: pointer;
+  cursor: pointer;
+  overflow: hidden;
 }
 .faq-q {
   font-size: 16px; font-weight: 600; display: flex;
   justify-content: space-between; align-items: center; gap: 16px;
+  padding: 24px 0;
+  user-select: none;
 }
-.faq-q::after { content: '+'; font-size: 24px; color: var(--red); font-weight: 300; transition: transform 0.2s; flex-shrink: 0; }
-.faq-item.open .faq-q::after { transform: rotate(45deg); }
-.faq-a { font-size: 14px; color: var(--gray-300); line-height: 1.7; max-height: 0; overflow: hidden; transition: all 0.3s ease; padding-top: 0; }
-.faq-item.open .faq-a { max-height: 200px; padding-top: 12px; }
+.faq-icon {
+  flex-shrink: 0;
+  width: 24px; height: 24px;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--red); font-size: 20px; font-weight: 300;
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  line-height: 1;
+}
+.faq-item.open .faq-icon { transform: rotate(45deg); }
+.faq-a-wrapper {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.faq-item.open .faq-a-wrapper { grid-template-rows: 1fr; }
+.faq-a-inner { overflow: hidden; }
+.faq-a {
+  font-size: 14px; color: var(--gray-300); line-height: 1.7;
+  padding-bottom: 20px;
+}
 
 /* ===== FINAL CTA ===== */
 .final-cta {
@@ -283,19 +371,19 @@ footer {
   .industry-grid { grid-template-columns: repeat(2, 1fr); }
   .industry-grid > :last-child { grid-column: span 2; max-width: 50%; margin: 0 auto; }
   .problem-grid, .services-grid, .process-steps { grid-template-columns: 1fr; }
-  .roi-row { grid-template-columns: 1.5fr 1fr 1fr 1fr; font-size: 12px; padding: 12px 16px; }
   .hero-stats { flex-wrap: wrap; gap: 24px; }
   .step-arrow { display: none; }
   .guarantee-box { padding: 36px 24px; }
   .pricing-card { padding: 36px 24px; }
   .hero { padding: 120px 0 80px; }
+  .roi-table { display: none; }
+  .roi-cards { display: flex; flex-direction: column; gap: 12px; }
+  .sticky-cta { bottom: 16px; right: 16px; }
+  .sticky-cta .btn { padding: 13px 20px; font-size: 13px; }
 }
 @media (max-width: 480px) {
   .industry-grid { grid-template-columns: 1fr 1fr; }
   .industry-grid > :last-child { max-width: 100%; }
-  .roi-row { grid-template-columns: 1fr; gap: 4px; padding: 16px; }
-  .roi-header { display: none; }
-  .roi-row:not(.roi-header) { position: relative; }
 }
 </style>
 </head>
@@ -309,8 +397,13 @@ footer {
 </div>
 </nav>
 
+<!-- STICKY CTA -->
+<div class="sticky-cta" id="stickyCta">
+  <a href="https://bookmenow.info/book/createmore/30-minutes" class="btn">Get Free Audit →</a>
+</div>
+
 <!-- HERO -->
-<section class="hero">
+<section class="hero" id="hero">
 <div class="container">
   <div class="hero-badge">Now accepting new clients</div>
   <h1>Your customers are searching.<br><span class="red">They're finding your competitors.</span></h1>
@@ -343,31 +436,31 @@ footer {
 <!-- INDUSTRIES -->
 <section class="industries">
 <div class="container">
-  <div class="section-label">Who This Is For</div>
-  <div class="section-title">Built for businesses where <span class="red">one customer pays for everything.</span></div>
-  <p class="section-sub">We specialize in high-ticket local service businesses — where a single new client from Google is worth thousands.</p>
+  <div class="section-label fade-in">Who This Is For</div>
+  <div class="section-title fade-in fade-in-delay-1">Built for businesses where <span class="red">one customer pays for everything.</span></div>
+  <p class="section-sub fade-in fade-in-delay-2">We specialize in high-ticket local service businesses — where a single new client from Google is worth thousands.</p>
   <div class="industry-grid">
-    <div class="industry-card">
+    <div class="industry-card fade-in fade-in-delay-1">
       <div class="industry-icon">🏥</div>
       <div class="industry-name">Med Spas</div>
       <div class="industry-value"><span>$500–$2,000</span> per treatment</div>
     </div>
-    <div class="industry-card">
+    <div class="industry-card fade-in fade-in-delay-2">
       <div class="industry-icon">🏦</div>
       <div class="industry-name">Mortgage Brokers</div>
       <div class="industry-value"><span>$3,000–$8,000</span> per close</div>
     </div>
-    <div class="industry-card">
+    <div class="industry-card fade-in fade-in-delay-3">
       <div class="industry-icon">🏠</div>
       <div class="industry-name">Real Estate Teams</div>
       <div class="industry-value"><span>$8,000–$15,000</span> per sale</div>
     </div>
-    <div class="industry-card">
+    <div class="industry-card fade-in fade-in-delay-4">
       <div class="industry-icon">⚖️</div>
       <div class="industry-name">Attorneys</div>
       <div class="industry-value"><span>$5,000–$50,000</span> per case</div>
     </div>
-    <div class="industry-card">
+    <div class="industry-card fade-in fade-in-delay-5">
       <div class="industry-icon">🔨</div>
       <div class="industry-name">Roofing & Renovation</div>
       <div class="industry-value"><span>$10,000–$50,000</span> per job</div>
@@ -379,20 +472,20 @@ footer {
 <!-- PROBLEM -->
 <section class="problem">
 <div class="container">
-  <div class="section-label">The Problem</div>
-  <div class="section-title">Right now, you're invisible to the people <span class="red">ready to pay you.</span></div>
+  <div class="section-label fade-in">The Problem</div>
+  <div class="section-title fade-in fade-in-delay-1">Right now, you're invisible to the people <span class="red">ready to pay you.</span></div>
   <div class="problem-grid">
-    <div class="problem-card">
+    <div class="problem-card fade-in fade-in-delay-1">
       <div class="problem-num">01</div>
       <h3>They search. You don't show up.</h3>
       <p>75% of people never scroll past the first 3 Google results. If you're not there, you don't exist to them. It's that simple.</p>
     </div>
-    <div class="problem-card">
+    <div class="problem-card fade-in fade-in-delay-2">
       <div class="problem-num">02</div>
       <h3>Your competitor gets the call.</h3>
       <p>The business that ranks #1 gets 27.6% of all clicks. That's your customers calling someone else — every single day.</p>
     </div>
-    <div class="problem-card">
+    <div class="problem-card fade-in fade-in-delay-3">
       <div class="problem-num">03</div>
       <h3>Every day costs you money.</h3>
       <p>Each month without SEO is thousands in revenue going directly to competitors who showed up where you didn't. The gap only widens.</p>
@@ -404,10 +497,12 @@ footer {
 <!-- ROI -->
 <section class="roi" id="roi">
 <div class="container">
-  <div class="section-label">The Math</div>
-  <div class="section-title">One customer from Google <span class="red">pays for months of SEO.</span></div>
-  <p class="section-sub">This isn't abstract. Here's the real math for each industry we serve.</p>
-  <div class="roi-table">
+  <div class="section-label fade-in">The Math</div>
+  <div class="section-title fade-in fade-in-delay-1">One customer from Google <span class="red">pays for months of SEO.</span></div>
+  <p class="section-sub fade-in fade-in-delay-2">This isn't abstract. Here's the real math for each industry we serve.</p>
+
+  <!-- Desktop table -->
+  <div class="roi-table fade-in fade-in-delay-3">
     <div class="roi-row roi-header">
       <div>Industry</div>
       <div>Per Customer</div>
@@ -445,43 +540,128 @@ footer {
       <div class="roi-roi">375%</div>
     </div>
   </div>
-  <p class="roi-note">Based on $1,495/mo investment. Conservative estimates — actual results often higher.</p>
+
+  <!-- Mobile cards -->
+  <div class="roi-cards">
+    <div class="roi-card fade-in fade-in-delay-1">
+      <div class="roi-card-header">
+        <div class="roi-card-name">🏥 Med Spas</div>
+        <div class="roi-card-roi">625% ROI</div>
+      </div>
+      <div class="roi-card-grid">
+        <div class="roi-card-stat">
+          <div class="roi-card-stat-label">Per Customer</div>
+          <div class="roi-card-stat-value">$800 first visit</div>
+        </div>
+        <div class="roi-card-stat">
+          <div class="roi-card-stat-label">Breaks Even At</div>
+          <div class="roi-card-stat-value">5 clients/mo</div>
+        </div>
+      </div>
+    </div>
+    <div class="roi-card fade-in fade-in-delay-2">
+      <div class="roi-card-header">
+        <div class="roi-card-name">🏦 Mortgage Brokers</div>
+        <div class="roi-card-roi">150% ROI</div>
+      </div>
+      <div class="roi-card-grid">
+        <div class="roi-card-stat">
+          <div class="roi-card-stat-label">Per Customer</div>
+          <div class="roi-card-stat-value">$5,000/close</div>
+        </div>
+        <div class="roi-card-stat">
+          <div class="roi-card-stat-label">Breaks Even At</div>
+          <div class="roi-card-stat-value">1 close/mo</div>
+        </div>
+      </div>
+    </div>
+    <div class="roi-card fade-in fade-in-delay-3">
+      <div class="roi-card-header">
+        <div class="roi-card-name">🏠 Real Estate Teams</div>
+        <div class="roi-card-roi">150% ROI</div>
+      </div>
+      <div class="roi-card-grid">
+        <div class="roi-card-stat">
+          <div class="roi-card-stat-label">Per Customer</div>
+          <div class="roi-card-stat-value">$10,000/sale</div>
+        </div>
+        <div class="roi-card-stat">
+          <div class="roi-card-stat-label">Breaks Even At</div>
+          <div class="roi-card-stat-value">1 sale/2 months</div>
+        </div>
+      </div>
+    </div>
+    <div class="roi-card fade-in fade-in-delay-4">
+      <div class="roi-card-header">
+        <div class="roi-card-name">⚖️ Attorneys (PI)</div>
+        <div class="roi-card-roi">275% ROI</div>
+      </div>
+      <div class="roi-card-grid">
+        <div class="roi-card-stat">
+          <div class="roi-card-stat-label">Per Customer</div>
+          <div class="roi-card-stat-value">$15,000/case</div>
+        </div>
+        <div class="roi-card-stat">
+          <div class="roi-card-stat-label">Breaks Even At</div>
+          <div class="roi-card-stat-value">1 case/3 months</div>
+        </div>
+      </div>
+    </div>
+    <div class="roi-card fade-in fade-in-delay-5">
+      <div class="roi-card-header">
+        <div class="roi-card-name">🔨 Roofing</div>
+        <div class="roi-card-roi">375% ROI</div>
+      </div>
+      <div class="roi-card-grid">
+        <div class="roi-card-stat">
+          <div class="roi-card-stat-label">Per Customer</div>
+          <div class="roi-card-stat-value">$15,000/job</div>
+        </div>
+        <div class="roi-card-stat">
+          <div class="roi-card-stat-label">Breaks Even At</div>
+          <div class="roi-card-stat-value">1 job/4 months</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <p class="roi-note fade-in">Based on $1,495/mo investment. Conservative estimates — actual results often higher.</p>
 </div>
 </section>
 
 <!-- SERVICES -->
 <section class="services">
 <div class="container">
-  <div class="section-label">What You Get</div>
-  <div class="section-title">A complete system to <span class="red">dominate local search.</span></div>
-  <p class="section-sub">Not just SEO — a full local marketing machine that drives calls, builds trust, and captures every lead.</p>
+  <div class="section-label fade-in">What You Get</div>
+  <div class="section-title fade-in fade-in-delay-1">A complete system to <span class="red">dominate local search.</span></div>
+  <p class="section-sub fade-in fade-in-delay-2">Not just SEO — a full local marketing machine that drives calls, builds trust, and captures every lead.</p>
   <div class="services-grid">
-    <div class="service-card">
+    <div class="service-card fade-in fade-in-delay-1">
       <div class="service-icon">🔍</div>
       <h3>Full-Service SEO</h3>
       <p>On-page and off-page optimization targeting the exact keywords your customers search for. Technical SEO, content optimization, and link building.</p>
     </div>
-    <div class="service-card">
+    <div class="service-card fade-in fade-in-delay-2">
       <div class="service-icon">📍</div>
       <h3>Google Maps & Local Pack</h3>
       <p>Dominate the Map Pack so when someone searches "[your service] near me," you're the first business they see. Every time.</p>
     </div>
-    <div class="service-card">
+    <div class="service-card fade-in fade-in-delay-3">
       <div class="service-icon">📂</div>
       <h3>50+ Directory Listings</h3>
       <p>Your business info — name, address, phone, hours — stays accurate and consistent across 50+ directories. Automatically synced.</p>
     </div>
-    <div class="service-card">
+    <div class="service-card fade-in fade-in-delay-1">
       <div class="service-icon">⭐</div>
       <h3>Reputation Management</h3>
       <p>Automated review requests after every job. Monitoring and response tools that build a 5-star reputation on autopilot.</p>
     </div>
-    <div class="service-card">
+    <div class="service-card fade-in fade-in-delay-2">
       <div class="service-icon">🤖</div>
       <h3>AI Chat Receptionist</h3>
       <p>A 24/7 AI-powered chat widget on your site that captures leads, answers questions, and books appointments while you sleep.</p>
     </div>
-    <div class="service-card">
+    <div class="service-card fade-in fade-in-delay-3">
       <div class="service-icon">📊</div>
       <h3>Monthly Performance Reports</h3>
       <p>Real numbers. Real insights. See exactly how your rankings, traffic, and leads are growing — with a strategy call every month to review.</p>
@@ -493,22 +673,22 @@ footer {
 <!-- PROCESS -->
 <section class="process">
 <div class="container">
-  <div class="section-label">How It Works</div>
-  <div class="section-title">Three steps. <span class="red">No complexity.</span></div>
+  <div class="section-label fade-in">How It Works</div>
+  <div class="section-title fade-in fade-in-delay-1">Three steps. <span class="red">No complexity.</span></div>
   <div class="process-steps">
-    <div class="step">
+    <div class="step fade-in fade-in-delay-1">
       <div class="step-num">1</div>
       <h3>We Audit Everything</h3>
       <p>We analyze your online presence, your competitors, and your market. You'll see exactly where you stand and where the opportunities are — for free.</p>
       <span class="step-arrow">→</span>
     </div>
-    <div class="step">
+    <div class="step fade-in fade-in-delay-2">
       <div class="step-num">2</div>
       <h3>We Build the System</h3>
       <p>We optimize your site, build your Google presence, sync your listings, set up reputation management, and deploy your AI receptionist. Done-for-you.</p>
       <span class="step-arrow">→</span>
     </div>
-    <div class="step">
+    <div class="step fade-in fade-in-delay-3">
       <div class="step-num">3</div>
       <h3>You Get Calls</h3>
       <p>Within 90 days, you'll see improved rankings, more website traffic, and most importantly — more phone calls from customers ready to pay.</p>
@@ -520,7 +700,7 @@ footer {
 <!-- GUARANTEE -->
 <section class="guarantee">
 <div class="container">
-  <div class="guarantee-box">
+  <div class="guarantee-box fade-in">
     <div class="guarantee-badge">🛡️ Performance Guarantee</div>
     <h2>Results in 90 days.<br><span class="red">Or we work free until you get them.</span></h2>
     <p>If we don't improve your rankings, traffic, and leads within 90 days — we keep working at no charge until we do. Zero risk. Full accountability. We don't get paid to try. We get paid to deliver.</p>
@@ -533,10 +713,10 @@ footer {
 <section class="pricing">
 <div class="container">
   <div style="text-align:center;">
-    <div class="section-label">Simple Pricing</div>
-    <div class="section-title">One plan. <span class="red">Everything included.</span></div>
+    <div class="section-label fade-in">Simple Pricing</div>
+    <div class="section-title fade-in fade-in-delay-1">One plan. <span class="red">Everything included.</span></div>
   </div>
-  <div class="pricing-card">
+  <div class="pricing-card fade-in fade-in-delay-2">
     <div class="pricing-amount">$1,495<span>/mo</span></div>
     <div class="pricing-note">No contracts. No setup fees. Cancel anytime.</div>
     <div class="pricing-features">
@@ -559,33 +739,33 @@ footer {
 <section class="faq">
 <div class="container">
   <div style="text-align:center;">
-    <div class="section-label">FAQ</div>
-    <div class="section-title">Questions? <span class="red">Answered.</span></div>
+    <div class="section-label fade-in">FAQ</div>
+    <div class="section-title fade-in fade-in-delay-1">Questions? <span class="red">Answered.</span></div>
   </div>
   <div class="faq-list">
-    <div class="faq-item">
-      <div class="faq-q">How long before I see results?</div>
-      <div class="faq-a">Most clients see measurable improvements within 60-90 days. SEO is a compounding investment — results accelerate over time. The businesses that start now will be months ahead of competitors who wait.</div>
+    <div class="faq-item fade-in fade-in-delay-1">
+      <div class="faq-q">How long before I see results?<span class="faq-icon">+</span></div>
+      <div class="faq-a-wrapper"><div class="faq-a-inner"><div class="faq-a">Most clients see measurable improvements within 60-90 days. SEO is a compounding investment — results accelerate over time. The businesses that start now will be months ahead of competitors who wait.</div></div></div>
     </div>
-    <div class="faq-item">
-      <div class="faq-q">I've been burned by agencies before. How is this different?</div>
-      <div class="faq-a">We guarantee results in writing. You get monthly reports with real numbers and a strategy call to review progress. If we don't deliver in 90 days, we work for free until we do. We have zero incentive to waste your time.</div>
+    <div class="faq-item fade-in fade-in-delay-2">
+      <div class="faq-q">I've been burned by agencies before. How is this different?<span class="faq-icon">+</span></div>
+      <div class="faq-a-wrapper"><div class="faq-a-inner"><div class="faq-a">We guarantee results in writing. You get monthly reports with real numbers and a strategy call to review progress. If we don't deliver in 90 days, we work for free until we do. We have zero incentive to waste your time.</div></div></div>
     </div>
-    <div class="faq-item">
-      <div class="faq-q">What industries do you work with?</div>
-      <div class="faq-a">We specialize in high-ticket local service businesses — med spas, mortgage brokers, real estate teams, attorneys, and roofing/renovation companies. Businesses where one new customer from Google is worth thousands.</div>
+    <div class="faq-item fade-in fade-in-delay-3">
+      <div class="faq-q">What industries do you work with?<span class="faq-icon">+</span></div>
+      <div class="faq-a-wrapper"><div class="faq-a-inner"><div class="faq-a">We specialize in high-ticket local service businesses — med spas, mortgage brokers, real estate teams, attorneys, and roofing/renovation companies. Businesses where one new customer from Google is worth thousands.</div></div></div>
     </div>
-    <div class="faq-item">
-      <div class="faq-q">Do I need to sign a long-term contract?</div>
-      <div class="faq-a">No. It's $1,495/month with no commitment and no setup fees. Cancel anytime. We keep you because we deliver results — not because of a contract.</div>
+    <div class="faq-item fade-in fade-in-delay-4">
+      <div class="faq-q">Do I need to sign a long-term contract?<span class="faq-icon">+</span></div>
+      <div class="faq-a-wrapper"><div class="faq-a-inner"><div class="faq-a">No. It's $1,495/month with no commitment and no setup fees. Cancel anytime. We keep you because we deliver results — not because of a contract.</div></div></div>
     </div>
-    <div class="faq-item">
-      <div class="faq-q">What if I already have a website?</div>
-      <div class="faq-a">Great — we'll optimize it. We audit your existing site, fix technical SEO issues, optimize your content for the keywords that matter, and build your local presence around it.</div>
+    <div class="faq-item fade-in fade-in-delay-5">
+      <div class="faq-q">What if I already have a website?<span class="faq-icon">+</span></div>
+      <div class="faq-a-wrapper"><div class="faq-a-inner"><div class="faq-a">Great — we'll optimize it. We audit your existing site, fix technical SEO issues, optimize your content for the keywords that matter, and build your local presence around it.</div></div></div>
     </div>
-    <div class="faq-item">
-      <div class="faq-q">Can I combine this with your social media services?</div>
-      <div class="faq-a">Yes — and businesses that do see the best results. SEO captures people actively searching. Social media builds awareness and trust. Together, you own both channels and your competitors can't compete.</div>
+    <div class="faq-item fade-in fade-in-delay-5">
+      <div class="faq-q">Can I combine this with your social media services?<span class="faq-icon">+</span></div>
+      <div class="faq-a-wrapper"><div class="faq-a-inner"><div class="faq-a">Yes — and businesses that do see the best results. SEO captures people actively searching. Social media builds awareness and trust. Together, you own both channels and your competitors can't compete.</div></div></div>
     </div>
   </div>
 </div>
@@ -594,10 +774,10 @@ footer {
 <!-- FINAL CTA -->
 <section class="final-cta">
 <div class="container">
-  <h2>Stop losing customers to competitors<br><span class="red">who just show up first.</span></h2>
-  <p>Every day you wait, someone else is ranking where you should be — and taking the call you should've gotten.</p>
-  <a href="https://bookmenow.info/book/createmore/30-minutes" class="btn">Get Your Free Audit →</a>
-  <div class="urgency">We take on 5 new clients per month — book your spot.</div>
+  <h2 class="fade-in">Stop losing customers to competitors<br><span class="red">who just show up first.</span></h2>
+  <p class="fade-in fade-in-delay-1">Every day you wait, someone else is ranking where you should be — and taking the call you should've gotten.</p>
+  <a href="https://bookmenow.info/book/createmore/30-minutes" class="btn fade-in fade-in-delay-2">Get Your Free Audit →</a>
+  <div class="urgency fade-in fade-in-delay-3">We take on 5 new clients per month — book your spot.</div>
 </div>
 </section>
 
@@ -609,7 +789,29 @@ footer {
 </footer>
 
 <script>
-// FAQ Accordion
+// ===== SCROLL ANIMATIONS =====
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+      observer.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+// ===== STICKY CTA =====
+const hero = document.getElementById('hero');
+const stickyCta = document.getElementById('stickyCta');
+const stickyObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    stickyCta.classList.toggle('visible', !entry.isIntersecting);
+  });
+}, { threshold: 0 });
+stickyObserver.observe(hero);
+
+// ===== FAQ ACCORDION =====
 document.querySelectorAll('.faq-item').forEach(item => {
   item.addEventListener('click', () => {
     const wasOpen = item.classList.contains('open');
