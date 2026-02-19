@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ManyChat Flows — @brandingwithshota</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root { --red: #E02020; --black: #0A0A0A; --card: #111; --border: #1E1E1E; --muted: #888; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif; background: var(--black); color: #fff; padding-bottom: 80px; }
+
+  .header { background: var(--card); border-bottom: 1px solid var(--border); padding: 16px 20px; display: flex; align-items: center; gap: 12px; position: sticky; top: 0; z-index: 100; }
+  .logo { width: 32px; height: 32px; background: var(--red); border-radius: 7px; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 16px; flex-shrink: 0; }
+  .header-text h1 { font-size: 15px; font-weight: 700; }
+  .header-text p { font-size: 12px; color: var(--muted); }
+
+  .tabs { display: flex; overflow-x: auto; background: var(--card); border-bottom: 1px solid var(--border); padding: 0 16px; gap: 0; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+  .tabs::-webkit-scrollbar { display: none; }
+  .tab { padding: 14px 16px; font-size: 13px; font-weight: 600; color: var(--muted); cursor: pointer; border-bottom: 2px solid transparent; white-space: nowrap; transition: all 0.15s; flex-shrink: 0; }
+  .tab.active { color: var(--red); border-bottom-color: var(--red); }
+
+  .container { max-width: 720px; margin: 0 auto; padding: 24px 16px; }
+
+  .flow { display: none; }
+  .flow.active { display: block; }
+
+  .flow-header { margin-bottom: 28px; }
+  .flow-label { font-size: 11px; font-weight: 700; letter-spacing: 3px; color: var(--red); text-transform: uppercase; margin-bottom: 8px; }
+  .flow-title { font-size: 26px; font-weight: 900; letter-spacing: -0.5px; margin-bottom: 8px; }
+  .flow-meta { font-size: 14px; color: var(--muted); line-height: 1.6; }
+  .keyword-badge { display: inline-block; background: rgba(224,32,32,0.12); border: 1px solid rgba(224,32,32,0.3); color: var(--red); font-size: 13px; font-weight: 700; padding: 4px 12px; border-radius: 100px; margin-top: 10px; font-family: monospace; letter-spacing: 1px; }
+
+  .step { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 20px; margin-bottom: 14px; }
+  .step-header { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+  .step-num { width: 28px; height: 28px; background: var(--red); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 800; flex-shrink: 0; }
+  .step-title { font-size: 14px; font-weight: 700; color: #fff; }
+  .step-subtitle { font-size: 12px; color: var(--muted); margin-top: 1px; }
+
+  .message-box { background: #0D0D0D; border: 1px solid #1A1A1A; border-radius: 10px; padding: 16px; margin-bottom: 10px; }
+  .message-label { font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
+  .message-text { font-size: 14px; color: #ddd; line-height: 1.7; white-space: pre-wrap; }
+
+  .buttons-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+  .btn-chip { background: #1A1A1A; border: 1px solid #2A2A2A; color: #bbb; font-size: 12px; font-weight: 600; padding: 6px 14px; border-radius: 100px; }
+
+  .action-box { background: rgba(224,32,32,0.07); border: 1px solid rgba(224,32,32,0.2); border-radius: 10px; padding: 14px 16px; margin-top: 10px; }
+  .action-label { font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--red); margin-bottom: 6px; }
+  .action-text { font-size: 13px; color: #ccc; line-height: 1.6; }
+
+  .warning { background: rgba(245,158,11,0.08); border: 1px solid rgba(245,158,11,0.25); border-radius: 10px; padding: 14px 16px; margin-bottom: 14px; }
+  .warning p { font-size: 13px; color: #d97706; line-height: 1.6; }
+  .warning strong { color: #fbbf24; }
+
+  .branch { border-left: 3px solid var(--border); padding-left: 16px; margin: 10px 0; }
+  .branch-if { font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
+
+  .checklist { list-style: none; }
+  .checklist li { display: flex; align-items: flex-start; gap: 10px; padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 14px; color: #ccc; line-height: 1.5; }
+  .checklist li:last-child { border-bottom: none; }
+  .check { width: 20px; height: 20px; border: 2px solid #333; border-radius: 4px; flex-shrink: 0; margin-top: 1px; }
+
+  .keyword-table { width: 100%; border-collapse: collapse; }
+  .keyword-table th { font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); text-align: left; padding: 10px 16px; border-bottom: 1px solid var(--border); }
+  .keyword-table td { font-size: 14px; padding: 12px 16px; border-bottom: 1px solid var(--border); color: #ccc; }
+  .keyword-table tr:last-child td { border-bottom: none; }
+  .kw-badge { font-family: monospace; background: rgba(224,32,32,0.12); color: var(--red); font-size: 13px; font-weight: 700; padding: 3px 10px; border-radius: 6px; }
+
+  .cta-card { background: var(--red); border-radius: 14px; padding: 24px; text-align: center; margin-bottom: 14px; }
+  .cta-card h3 { font-size: 18px; font-weight: 800; margin-bottom: 8px; }
+  .cta-card p { font-size: 14px; color: rgba(255,255,255,0.8); line-height: 1.6; }
+  .cta-link { display: inline-block; margin-top: 16px; background: #fff; color: var(--red); font-size: 14px; font-weight: 800; padding: 12px 28px; border-radius: 10px; text-decoration: none; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="logo">C</div>
+  <div class="header-text">
+    <h1>ManyChat Flows</h1>
+    <p>@brandingwithshota — All 5 Lead Magnets</p>
+  </div>
+</div>
+
+<div class="tabs">
+  <div class="tab active" onclick="showFlow(0, this)">📋 Overview</div>
+  <div class="tab" onclick="showFlow(1, this)">1 · Script Pack</div>
+  <div class="tab" onclick="showFlow(2, this)">2 · Audit</div>
+  <div class="tab" onclick="showFlow(3, this)">3 · Calculator</div>
+  <div class="tab" onclick="showFlow(4, this)">4 · Calendar</div>
+  <div class="tab" onclick="showFlow(5, this)">5 · Custom Script</div>
+</div>
+
+<div class="container">
+
+<!-- ===================== OVERVIEW ===================== -->
+<div class="flow active" id="flow-0">
+  <div class="flow-header">
+    <div class="flow-label">Quick Reference</div>
+    <div class="flow-title">5 Lead Magnet Flows</div>
+    <div class="flow-meta">Tap a flow above to see the full messages and setup steps. Set these up in order — start with Flow 1 and 3 since they're fully automated.</div>
+  </div>
+
+  <div class="step">
+    <div class="step-header">
+      <div style="font-size:20px;">🔑</div>
+      <div>
+        <div class="step-title">Keyword Summary</div>
+        <div class="step-subtitle">Add these in ManyChat → Automation → Keywords</div>
+      </div>
+    </div>
+    <table class="keyword-table">
+      <tr><th>Flow</th><th>Keyword</th><th>Human needed?</th></tr>
+      <tr><td>Script Pack</td><td><span class="kw-badge">SCRIPTS</span></td><td>Only for "other" industry</td></tr>
+      <tr><td>Free Audit</td><td><span class="kw-badge">AUDIT</span></td><td>✅ Yes — you review their page</td></tr>
+      <tr><td>ROI Calculator</td><td><span class="kw-badge">MATH</span></td><td>No — fully automated</td></tr>
+      <tr><td>30-Day Calendar</td><td><span class="kw-badge">CALENDAR</span></td><td>Coming soon</td></tr>
+      <tr><td>Custom Script</td><td><span class="kw-badge">SCRIPT</span></td><td>✅ Yes — you write their script</td></tr>
+    </table>
+  </div>
+
+  <div class="step">
+    <div class="step-header">
+      <div style="font-size:20px;">✅</div>
+      <div>
+        <div class="step-title">Go-Live Checklist</div>
+        <div class="step-subtitle">Before activating any flow</div>
+      </div>
+    </div>
+    <ul class="checklist">
+      <li><div class="check"></div>Instagram connected to ManyChat</li>
+      <li><div class="check"></div>Tested each flow with your own account (comment the keyword yourself)</li>
+      <li><div class="check"></div>All links work and go to correct pages</li>
+      <li><div class="check"></div>Message 1 response set to "immediately"</li>
+      <li><div class="check"></div>Human notification ON for Flows 2 and 5</li>
+      <li><div class="check"></div>STOP keyword set (unsubscribes people from all flows)</li>
+      <li><div class="check"></div>Keywords added to video captions and CTAs</li>
+    </ul>
+  </div>
+
+  <div class="step">
+    <div class="step-header">
+      <div style="font-size:20px;">📍</div>
+      <div>
+        <div class="step-title">Posting CTAs</div>
+        <div class="step-subtitle">Add these to your video captions/descriptions</div>
+      </div>
+    </div>
+    <div class="message-box">
+      <div class="message-label">Script Template reel</div>
+      <div class="message-text">"Comment SCRIPTS and I'll DM you 3 ready-to-film scripts for your industry"</div>
+    </div>
+    <div class="message-box">
+      <div class="message-label">Why Your Content Feels Off reel</div>
+      <div class="message-text">"Comment AUDIT and I'll review your page for free"</div>
+    </div>
+    <div class="message-box">
+      <div class="message-label">Math on Content reel</div>
+      <div class="message-text">"Comment MATH and I'll send you the ROI calculator"</div>
+    </div>
+    <div class="message-box">
+      <div class="message-label">60-Second Script reel</div>
+      <div class="message-text">"Comment SCRIPT and I'll write one for YOUR business"</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== FLOW 1 — SCRIPTS ===================== -->
+<div class="flow" id="flow-1">
+  <div class="flow-header">
+    <div class="flow-label">Flow 1</div>
+    <div class="flow-title">The Script Pack 🎬</div>
+    <div class="flow-meta">3 ready-to-film scripts for their specific industry. Fully automated. Best post to run it on: Script Template reel or any Script This episode.</div>
+    <div class="keyword-badge">SCRIPTS</div>
+  </div>
+
+  <div class="step">
+    <div class="step-header"><div class="step-num">1</div><div><div class="step-title">Message 1 — Immediate</div><div class="step-subtitle">Sent the moment they comment SCRIPTS</div></div></div>
+    <div class="message-box">
+      <div class="message-label">Message copy</div>
+      <div class="message-text">Hey! Your free script pack is on the way 🎬
+
+Before I send it — what type of business do you run?</div>
+    </div>
+    <div class="buttons-row">
+      <div class="btn-chip">🏥 Med Spa</div>
+      <div class="btn-chip">⚖️ Attorney</div>
+      <div class="btn-chip">🏠 Real Estate</div>
+      <div class="btn-chip">🔨 Roofing / Reno</div>
+      <div class="btn-chip">🏦 Mortgage</div>
+      <div class="btn-chip">💼 Something else</div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-header"><div class="step-num">2</div><div><div class="step-title">Message 2 — Based on industry</div><div class="step-subtitle">One branch per button click</div></div></div>
+
+    <div class="branch">
+      <div class="branch-if">IF: Med Spa</div>
+      <div class="message-box"><div class="message-text">Perfect. Here's your Med Spa Script Pack — 3 ready-to-film scripts engineered for aesthetics clients 👇
+
+🔗 https://shotasprunger1114-sys.github.io/cmp-seo-landing/scripts/?pack=medspa
+
+Each script follows the exact framework that gets service businesses thousands in new clients from content.
+
+Film tip: natural light, phone at eye level, speak directly to camera.
+
+If you want these scripted, filmed, and posted for you — that's exactly what we do at Create More Productions.
+👉 Book a free call: https://bookmenow.info/book/createmore/30-minutes</div></div>
+    </div>
+
+    <div class="branch">
+      <div class="branch-if">IF: Attorney</div>
+      <div class="message-box"><div class="message-text">Got it. Here's your Attorney Script Pack — 3 scripts that build trust before you ever mention your services 👇
+
+🔗 https://shotasprunger1114-sys.github.io/cmp-seo-landing/scripts/?pack=attorney
+
+These work for PI, family law, criminal defense — position yourself as the educator, not the salesperson.
+
+If you want this done for you every month — that's what we do.
+👉 Book a free call: https://bookmenow.info/book/createmore/30-minutes</div></div>
+    </div>
+
+    <div class="branch">
+      <div class="branch-if">IF: Real Estate</div>
+      <div class="message-box"><div class="message-text">Here's your Real Estate Script Pack — 3 scripts that make buyers and sellers choose YOU before they ever meet you 👇
+
+🔗 https://shotasprunger1114-sys.github.io/cmp-seo-landing/scripts/?pack=realestate
+
+Written to drive comments and DMs — warm leads without spending on ads.
+
+If you want this handled every month — we should talk.
+👉 Book a free call: https://bookmenow.info/book/createmore/30-minutes</div></div>
+    </div>
+
+    <div class="branch">
+      <div class="branch-if">IF: Roofing / Reno</div>
+      <div class="message-box"><div class="message-text">Here's your Roofing & Renovation Script Pack — 3 scripts that turn homeowners into trust-first leads 👇
+
+🔗 https://shotasprunger1114-sys.github.io/cmp-seo-landing/scripts/?pack=roofing
+
+Roofing content works incredibly well — homeowners don't know what they don't know. You become the expert by default.
+
+If you want this running on autopilot — let's talk.
+👉 Book a free call: https://bookmenow.info/book/createmore/30-minutes</div></div>
+    </div>
+
+    <div class="branch">
+      <div class="branch-if">IF: Mortgage</div>
+      <div class="message-box"><div class="message-text">Here's your Mortgage Script Pack — 3 scripts that position you as the expert before rate comparisons even start 👇
+
+🔗 https://shotasprunger1114-sys.github.io/cmp-seo-landing/scripts/?pack=mortgage
+
+The education angle works best for mortgage — be the one who breaks it down simply and you own the trust.
+
+If you want this handled for you — we should talk.
+👉 Book a free call: https://bookmenow.info/book/createmore/30-minutes</div></div>
+    </div>
+
+    <div class="branch">
+      <div class="branch-if">IF: Something else</div>
+      <div class="message-box"><div class="message-text">Got it! Tell me what type of business you run and I'll point you to the closest script pack 👇</div></div>
+      <div class="action-box"><div class="action-label">⚠️ Action required</div><div class="action-text">Set "Assign to Human" after this message. You'll get notified and can reply manually.</div></div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-header"><div class="step-num">3</div><div><div class="step-title">Follow-Up — 24 hours later</div><div class="step-subtitle">Sent automatically the next day</div></div></div>
+    <div class="message-box"><div class="message-text">Hey! Just checking — did you get a chance to look at the scripts? 📋
+
+Curious what you thought. Easiest way to use them: film one this week, even rough, just to see how it feels on camera.
+
+If you have questions about the content or filming setup, reply here and I'll help 👋</div></div>
+  </div>
+</div>
+
+<!-- ===================== FLOW 2 — AUDIT ===================== -->
+<div class="flow" id="flow-2">
+  <div class="flow-header">
+    <div class="flow-label">Flow 2</div>
+    <div class="flow-title">The Free Content Audit 🔍</div>
+    <div class="flow-meta">Personalized review of their IG page. This is your highest-converting flow — it IS the sales call. Best post: "Why Your Content Feels Off"</div>
+    <div class="keyword-badge">AUDIT</div>
+  </div>
+
+  <div class="warning"><p><strong>⚠️ Human required:</strong> After they submit their handle, you review their page and send a personal voice/video response within 24 hours. Set ManyChat to notify you immediately.</p></div>
+
+  <div class="step">
+    <div class="step-header"><div class="step-num">1</div><div><div class="step-title">Message 1 — Immediate</div></div></div>
+    <div class="message-box"><div class="message-text">Let's take a look 👀
+
+I'll audit your page for free — no pitch, no pressure. Just honest feedback on what's working and what's costing you leads.
+
+Drop your Instagram handle below (the @username):</div></div>
+    <div class="action-box"><div class="action-label">Action</div><div class="action-text">After they reply with handle → set "Assign to Human" and trigger notification to you</div></div>
+  </div>
+
+  <div class="step">
+    <div class="step-header"><div class="step-num">2</div><div><div class="step-title">Message 2 — After handle received (automated)</div></div></div>
+    <div class="message-box"><div class="message-text">Got it! Reviewing your page now 🔍
+
+One quick question while I look — what's your #1 challenge with content right now?</div></div>
+    <div class="buttons-row">
+      <div class="btn-chip">Not getting enough views</div>
+      <div class="btn-chip">Getting views but no leads</div>
+      <div class="btn-chip">No time to post consistently</div>
+      <div class="btn-chip">Don't know what to post</div>
+      <div class="btn-chip">Content doesn't look professional</div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-header"><div class="step-num">3</div><div><div class="step-title">Message 3 — After challenge selected (automated)</div></div></div>
+    <div class="message-box"><div class="message-text">Perfect — that helps me focus the audit on what actually matters for you.
+
+I'll send your review within 24 hours. Short and specific — what's working, what's hurting you, and the one thing I'd change first.
+
+Talk soon 👋</div></div>
+  </div>
+
+  <div class="step">
+    <div class="step-header"><div class="step-num">4</div><div><div class="step-title">Your Manual Response (template)</div><div class="step-subtitle">Send this after reviewing their page</div></div></div>
+    <div class="message-box"><div class="message-text">Hey [name]! Reviewed your page 👀
+
+What's working: [honest thing that's actually good — post frequency, a specific format, their niche, etc.]
+
+What's costing you leads: [the main issue — weak hooks / no CTA / wrong content type / inconsistent posting / etc.]
+
+First thing I'd change: [one specific, actionable fix they can do this week]
+
+If you want us to take this off your plate entirely — 20 videos/month, fully scripted, edited, and posted — that's what we do. Here's how to book a call if that's interesting:
+👉 https://bookmenow.info/book/createmore/30-minutes
+
+Either way, hope that helps 👊</div></div>
+  </div>
+</div>
+
+<!-- ===================== FLOW 3 — CALCULATOR ===================== -->
+<div class="flow" id="flow-3">
+  <div class="flow-header">
+    <div class="flow-label">Flow 3</div>
+    <div class="flow-title">ROI Calculator 🧮</div>
+    <div class="flow-meta">100% automated. Sends the calculator link and follows up based on where they are in the decision. Best post: "The Math on Content"</div>
+    <div class="keyword-badge">MATH</div>
+  </div>
+
+  <div class="step">
+    <div class="step-header"><div class="step-num">1</div><div><div class="step-title">Message 1 — Immediate</div></div></div>
+    <div class="message-box"><div class="message-text">Here it is 🧮
+
+Put in your numbers and it'll tell you exactly what content is worth to your business — in real dollars.
+
+👉 https://shotasprunger1114-sys.github.io/cmp-seo-landing/calculator/
+
+Select your industry and it pre-fills the averages. Takes about 30 seconds.</div></div>
+  </div>
+
+  <div class="step">
+    <div class="step-header"><div class="step-num">2</div><div><div class="step-title">Message 2 — 30 minutes later (automated)</div></div></div>
+    <div class="message-box"><div class="message-text">Did the numbers surprise you? 👀
+
+Most people are shocked when they see the annual figure — especially when one client covers months of the investment.
+
+Quick question: is content something you're trying to figure out yourself, or are you open to having someone handle it for you?</div></div>
+    <div class="buttons-row">
+      <div class="btn-chip">DIY — figuring it out myself</div>
+      <div class="btn-chip">Open to having help</div>
+      <div class="btn-chip">Just exploring for now</div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-header"><div class="step-num">3</div><div><div class="step-title">Message 3 — Based on their answer</div></div></div>
+
+    <div class="branch">
+      <div class="branch-if">IF: DIY</div>
+      <div class="message-box"><div class="message-text">Respect that. Two things that'll help most:
+
+1. Post consistently even if imperfect — algorithm rewards regularity
+2. Start every video with a hook that names a fear your customer has, not what you offer
+
+DM me anytime if you get stuck. Happy to help 🤙</div></div>
+    </div>
+
+    <div class="branch">
+      <div class="branch-if">IF: Open to help</div>
+      <div class="message-box"><div class="message-text">Perfect. Here's how we work at Create More Productions:
+
+→ 20 videos/month — scripted, directed, edited, posted
+→ Strategy built around your specific vertical and ideal client
+→ Your job: show up on camera. We handle everything else.
+
+Price: $4,000/month. 6-month commitment.
+
+If that makes sense for your business, let's jump on a quick call:
+👉 https://bookmenow.info/book/createmore/30-minutes</div></div>
+    </div>
+
+    <div class="branch">
+      <div class="branch-if">IF: Just exploring</div>
+      <div class="message-box"><div class="message-text">Totally fine! Bookmark the calculator — it's useful whenever you're ready to make the case internally.
+
+Feel free to reach out anytime. No rush, no pressure 🤙</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== FLOW 4 — CALENDAR ===================== -->
+<div class="flow" id="flow-4">
+  <div class="flow-header">
+    <div class="flow-label">Flow 4</div>
+    <div class="flow-title">30-Day Content Calendar 📅</div>
+    <div class="flow-meta">Industry-specific content plan with 30 topics, hooks, and ideas. Best post: any Script This episode.</div>
+    <div class="keyword-badge">CALENDAR</div>
+  </div>
+
+  <div class="warning"><p><strong>🔜 Coming soon:</strong> The 30-day calendars for each vertical are being built. For now the flow sends them the Script Pack as a bridge — still delivers immediate value.</p></div>
+
+  <div class="step">
+    <div class="step-header"><div class="step-num">1</div><div><div class="step-title">Message 1 — Immediate</div></div></div>
+    <div class="message-box"><div class="message-text">Your content calendar is on the way 📅
+
+Quick question first — what industry are you in? I want the topics and hooks to be specific to your space (not generic "post more tips" advice).</div></div>
+    <div class="buttons-row">
+      <div class="btn-chip">🏥 Med Spa</div>
+      <div class="btn-chip">⚖️ Attorney / Law</div>
+      <div class="btn-chip">🏠 Real Estate</div>
+      <div class="btn-chip">🔨 Roofing / Home Reno</div>
+      <div class="btn-chip">🏦 Mortgage / Lending</div>
+      <div class="btn-chip">💼 Other</div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-header"><div class="step-num">2</div><div><div class="step-title">Message 2 — Bridge (while calendar is built)</div></div></div>
+    <div class="message-box"><div class="message-text">Awesome — building your [INDUSTRY] calendar now.
+
+While you wait, here's something you can use today: 3 ready-to-film scripts for [INDUSTRY] businesses 👇
+
+[SEND MATCHING SCRIPT PACK LINK FOR THEIR INDUSTRY]
+
+Your full 30-day calendar will be ready within 24 hours. I'll DM it straight here.</div></div>
+    <div class="action-box"><div class="action-label">Action</div><div class="action-text">Set human notification so you know a calendar was requested — respond within 24 hours when calendars are live</div></div>
+  </div>
+</div>
+
+<!-- ===================== FLOW 5 — CUSTOM SCRIPT ===================== -->
+<div class="flow" id="flow-5">
+  <div class="flow-header">
+    <div class="flow-label">Flow 5</div>
+    <div class="flow-title">Your Free Custom Script ✍️</div>
+    <div class="flow-meta">Personalized hook + script for their specific business. Highest intent leads — people who want this are exactly who hires you. Best post: "I'll Script Your Business in 60 Seconds"</div>
+    <div class="keyword-badge">SCRIPT</div>
+  </div>
+
+  <div class="warning"><p><strong>⚠️ Human required:</strong> You write the custom script and DM it back. Treat this like a mini sales call — it demonstrates your expertise live and closes at a high rate.</p></div>
+
+  <div class="step">
+    <div class="step-header"><div class="step-num">1</div><div><div class="step-title">Message 1 — Immediate</div></div></div>
+    <div class="message-box"><div class="message-text">Let's write your script 🎬
+
+Tell me — what type of business do you run?</div></div>
+  </div>
+
+  <div class="step">
+    <div class="step-header"><div class="step-num">2</div><div><div class="step-title">Message 2 — After they tell you their business</div></div></div>
+    <div class="message-box"><div class="message-text">Love it.
+
+One more question: what's the #1 thing you want a viewer to do after watching your video?</div></div>
+    <div class="buttons-row">
+      <div class="btn-chip">Call / DM me</div>
+      <div class="btn-chip">Book an appointment</div>
+      <div class="btn-chip">Visit my website</div>
+      <div class="btn-chip">Come into my location</div>
+      <div class="btn-chip">Follow my page</div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-header"><div class="step-num">3</div><div><div class="step-title">Message 3 — After goal selected</div></div></div>
+    <div class="message-box"><div class="message-text">Got everything I need.
+
+Writing your script now — I'll send it within 24 hours. It'll include:
+→ A hook that stops the scroll
+→ A body that builds trust
+→ A close that drives your specific CTA
+
+Talk soon 👋</div></div>
+    <div class="action-box"><div class="action-label">Action</div><div class="action-text">Set "Assign to Human" — you write the script and DM it back using the template below</div></div>
+  </div>
+
+  <div class="step">
+    <div class="step-header"><div class="step-num">4</div><div><div class="step-title">Your Script Delivery (template)</div><div class="step-subtitle">Send this after writing their script</div></div></div>
+    <div class="message-box"><div class="message-text">Here's your custom script 🎬
+
+---
+[THEIR BUSINESS TYPE]
+
+HOOK: "[Custom hook based on their biggest customer fear]"
+
+BODY: "[2-3 sentences: agitate the problem, hint at the solution]"
+
+CLOSE: "[Clear CTA tied to their goal — book, call, DM, etc.]"
+---
+
+Film this on your phone. Natural light. Look straight at camera. Keep it under 60 seconds.
+
+Tip: the hook is everything. If the first line doesn't feel uncomfortable to say — it probably isn't strong enough. Lean into it.
+
+Want 20 of these every month, scripted, filmed, edited, and posted for you? That's what we do.
+👉 https://bookmenow.info/book/createmore/30-minutes</div></div>
+  </div>
+</div>
+
+</div><!-- /container -->
+
+<script>
+function showFlow(idx, el) {
+  document.querySelectorAll('.flow').forEach((f, i) => f.classList.toggle('active', i === idx));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+</script>
+</body>
+</html>
