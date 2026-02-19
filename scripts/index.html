@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title id="pageTitle">Script Pack — Create More Productions</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', sans-serif; background: #fff; color: #111; }
+
+  .cover { background: #0A0A0A; min-height: 100vh; display: flex; flex-direction: column; justify-content: center; padding: 80px; page-break-after: always; }
+  .cover-label { font-size: 13px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: #E02020; margin-bottom: 24px; }
+  .cover-industry { font-size: 14px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: #555; margin-bottom: 16px; }
+  .cover h1 { font-size: 72px; font-weight: 900; color: #fff; line-height: 1.0; letter-spacing: -2px; margin-bottom: 32px; }
+  .cover h1 span { color: #E02020; }
+  .cover p { font-size: 20px; color: #888; line-height: 1.6; max-width: 560px; margin-bottom: 48px; }
+  .cover-rule { width: 60px; height: 4px; background: #E02020; margin-bottom: 32px; }
+  .cover-instructions { background: #111; border: 1px solid #1E1E1E; border-radius: 16px; padding: 28px 32px; max-width: 600px; }
+  .cover-instructions h3 { font-size: 13px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: #E02020; margin-bottom: 16px; }
+  .cover-instructions ul { list-style: none; }
+  .cover-instructions ul li { font-size: 15px; color: #aaa; padding: 6px 0; padding-left: 20px; position: relative; line-height: 1.5; }
+  .cover-instructions ul li:before { content: '→'; position: absolute; left: 0; color: #E02020; }
+  .cover-handle { position: fixed; bottom: 40px; left: 80px; font-size: 15px; color: #333; font-weight: 600; display: none; }
+  .cover-branding { margin-top: 48px; display: flex; align-items: center; gap: 12px; }
+  .cover-logo { width: 40px; height: 40px; background: #E02020; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: 900; color: #fff; flex-shrink: 0; }
+  .cover-brand-text h4 { font-size: 15px; font-weight: 700; color: #fff; }
+  .cover-brand-text p { font-size: 12px; color: #555; margin-top: 1px; }
+
+  /* Script pages */
+  .script-page { padding: 64px 80px; page-break-after: always; background: #fff; }
+  .script-num { font-size: 11px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: #E02020; margin-bottom: 12px; }
+  .script-title { font-size: 36px; font-weight: 900; color: #111; line-height: 1.1; letter-spacing: -1px; margin-bottom: 6px; }
+  .script-meta { display: flex; gap: 16px; margin-bottom: 32px; flex-wrap: wrap; }
+  .meta-tag { font-size: 12px; font-weight: 600; padding: 4px 12px; border-radius: 100px; }
+  .tag-pillar { background: #F5F5F5; color: #555; }
+  .tag-emotion { background: #FFF0F0; color: #CC0000; }
+  .tag-duration { background: #F0F5FF; color: #2255AA; }
+
+  .script-divider { height: 2px; background: #F0F0F0; margin-bottom: 32px; }
+
+  .script-block { margin-bottom: 24px; }
+  .block-label { font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: #E02020; margin-bottom: 8px; }
+  .block-text { font-size: 16px; color: #222; line-height: 1.75; padding-left: 16px; border-left: 3px solid #E02020; }
+  .block-text.rehook { border-left-color: #F59E0B; }
+  .block-label.rehook { color: #B45309; }
+
+  .script-footer { margin-top: 40px; padding-top: 24px; border-top: 1px solid #F0F0F0; }
+  .footer-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  .footer-section h4 { font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: #999; margin-bottom: 10px; }
+  .footer-section p { font-size: 14px; color: #444; line-height: 1.6; }
+  .footer-section ul { list-style: none; }
+  .footer-section ul li { font-size: 13px; color: #555; padding: 3px 0; padding-left: 14px; position: relative; }
+  .footer-section ul li:before { content: '#'; position: absolute; left: 0; color: #bbb; }
+
+  /* Last page CTA */
+  .cta-page { background: #E02020; min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 80px; }
+  .cta-page h2 { font-size: 56px; font-weight: 900; color: #fff; line-height: 1.1; letter-spacing: -2px; margin-bottom: 20px; }
+  .cta-page p { font-size: 20px; color: rgba(255,255,255,0.75); max-width: 520px; line-height: 1.6; margin-bottom: 48px; }
+  .cta-pill { background: #fff; color: #E02020; font-size: 18px; font-weight: 800; padding: 18px 40px; border-radius: 12px; text-decoration: none; display: inline-block; letter-spacing: -0.3px; }
+  .cta-sub { font-size: 14px; color: rgba(255,255,255,0.5); margin-top: 20px; }
+  .cta-handle { font-size: 16px; color: rgba(255,255,255,0.6); margin-top: 48px; font-weight: 600; }
+
+  @media print {
+    body { background: #fff; }
+    .cover { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .cta-page { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ========================================
+     COVER PAGE
+======================================== -->
+<div class="cover">
+  <div class="cover-label">Free Script Pack</div>
+  <div class="cover-industry" id="industryLabel">Med Spa</div>
+  <h1>3 Ready-to-Film<br>Scripts for Your<br><span id="industrySpan">Med Spa</span>.</h1>
+  <p>Copy these word-for-word. Film on your phone. Post within the week. Each one is engineered to stop the scroll and turn viewers into clients.</p>
+  <div class="cover-rule"></div>
+  <div class="cover-instructions">
+    <h3>How to Use These</h3>
+    <ul>
+      <li>Film in natural light, phone at eye level</li>
+      <li>Speak directly to camera like you're talking to one person</li>
+      <li>Keep it under 75 seconds — shorter is better</li>
+      <li>Add text overlays for key stats and phrases</li>
+      <li>Post with the caption and hashtags at the end of each script</li>
+    </ul>
+  </div>
+  <div class="cover-branding">
+    <div class="cover-logo">C</div>
+    <div class="cover-brand-text">
+      <h4>Create More Productions</h4>
+      <p>@brandingwithshota</p>
+    </div>
+  </div>
+</div>
+
+
+<!-- ========================================
+     SCRIPTS (dynamically rendered)
+======================================== -->
+<div id="scriptsContainer"></div>
+
+
+<!-- ========================================
+     CTA PAGE
+======================================== -->
+<div class="cta-page">
+  <h2>Want us to do<br>all of this<br>for you?</h2>
+  <p>We handle everything — strategy, scripting, filming direction, editing, and posting. You focus on running your business. We bring the clients to your door.</p>
+  <a href="https://bookmenow.info/book/createmore/30-minutes" class="cta-pill">Book a Free Strategy Call →</a>
+  <div class="cta-sub">30 minutes. No pressure. We show you exactly what we'd do for your business.</div>
+  <div class="cta-handle">@brandingwithshota</div>
+</div>
+
+<script>
+// ============================================================
+// SCRIPT DATA — 5 industries × 3 scripts each
+// ============================================================
+
+const PACKS = {
+  medspa: {
+    industry: 'Med Spa',
+    scripts: [
+      {
+        num: '01',
+        title: 'She Was Terrified of Looking Fake',
+        pillar: 'Build in Public',
+        emotion: 'Empathy → Relief',
+        duration: '45-60 sec',
+        blocks: [
+          { label: 'HOOK', text: '"She almost canceled her appointment because she was terrified of looking fake. Here\'s what we told her — and why she\'s now a regular."', type: 'hook' },
+          { label: 'BODY 1', text: '"She\'d been scrolling horror stories for a year. Frozen faces. People who didn\'t look like themselves. She wanted to feel more refreshed but couldn\'t risk looking like a completely different person."', type: 'body' },
+          { label: 'REHOOK', text: '"Here\'s the truth nobody tells you about Botox—"', type: 'rehook' },
+          { label: 'BODY 2', text: '"Good Botox doesn\'t make you look different. It makes you look like you slept 8 hours every night for a month. The goal is never \'done\' — it\'s \'rested.\' That\'s it. And once we explained that? She booked immediately."', type: 'body' },
+          { label: 'OUTRO', text: '"If you\'ve been putting it off because you\'re scared of that frozen look — that\'s the old version of Botox. Come talk to us. We\'ll show you the difference."', type: 'body' },
+        ],
+        cta: 'Have questions about Botox? Drop them below 👇',
+        caption: 'She almost didn\'t come in.\n\nA year of scrolling horror stories.\nFrozen faces. "Done" looks.\n\nWe told her the truth:\n\nGood Botox doesn\'t make you look different.\nIt makes you look like you slept 8 hours every night.\n\nShe booked immediately.\nNow she\'s a regular.\n\nIf you\'ve been scared of the frozen look —\nthat\'s not what we do.\n\nDrop your questions below 👇',
+        hashtags: '#medspa #botox #aesthetics #medspanearme #botoxbeforeandafter #naturalbotox #antiwrinkle #skincare #medspaskincare #selfcare'
+      },
+      {
+        num: '02',
+        title: 'The One Thing Most Med Spas Get Wrong',
+        pillar: 'Hot Takes',
+        emotion: 'Outrage → Trust',
+        duration: '50-65 sec',
+        blocks: [
+          { label: 'HOOK', text: '"Most med spas are selling treatments. The best ones are selling confidence. And there\'s a huge difference."', type: 'hook' },
+          { label: 'BODY 1', text: '"Walk into most places and it\'s all: \'We offer filler, Botox, laser, PRP.\' Great. So does everyone else. That doesn\'t tell me why I should trust you with my face."', type: 'body' },
+          { label: 'REHOOK', text: '"Here\'s what clients actually want to know—"', type: 'rehook' },
+          { label: 'BODY 2', text: '"They want to know: Will I look like myself? Will it hurt? What if I don\'t like it? Can I trust the person doing this? Those are the questions you need to answer before they ever walk through the door. That\'s what great content does. It answers the questions they\'re too afraid to ask."', type: 'body' },
+          { label: 'OUTRO', text: '"If you have questions about any treatment — any at all — drop them in the comments. No judgment. That\'s what we\'re here for."', type: 'body' },
+        ],
+        cta: 'What questions do you have about med spa treatments? 👇',
+        caption: 'Most med spas sell treatments.\nThe best ones sell confidence.\n\nBig difference.\n\nClients don\'t want to know what you offer.\nThey want to know:\n\n→ Will I still look like me?\n→ What if I don\'t like it?\n→ Can I trust you with my face?\n\nAnswer those questions before they walk in.\nThat\'s what great content does.\n\nDrop your questions below — no judgment 👇',
+        hashtags: '#medspa #medspaskincare #aestheticmedicine #skincareexpert #cosmetictreatments #medspanearme #aesthetics #skincaretips #botoxquestions #fillertips'
+      },
+      {
+        num: '03',
+        title: 'What a $500 Treatment Is Actually Worth',
+        pillar: 'The Business Case (for the client)',
+        emotion: 'Curiosity → Realization',
+        duration: '45-60 sec',
+        blocks: [
+          { label: 'HOOK', text: '"People think $500 for a treatment is expensive. Let me show you what they\'re actually buying."', type: 'hook' },
+          { label: 'BODY 1', text: '"You\'re not paying for filler. You\'re paying to stop dreading the mirror every morning. You\'re paying to walk into a meeting and not think about how tired you look. You\'re paying for the confidence to show up fully — at work, with your family, in photos."', type: 'body' },
+          { label: 'REHOOK', text: '"Now tell me — what\'s that actually worth?"', type: 'rehook' },
+          { label: 'BODY 2', text: '"Our clients consistently say the same thing after their first treatment: \'I wish I\'d done this sooner.\' Not because of how they look — because of how they feel. The results are external. The impact is internal."', type: 'body' },
+          { label: 'OUTRO', text: '"If you\'ve been on the fence — book a consultation. There\'s no obligation, no pressure, no upsell. Just a conversation."', type: 'body' },
+        ],
+        cta: 'What would you do with a confidence boost? 👇',
+        caption: 'People think $500 for a treatment is expensive.\n\nHere\'s what they\'re actually buying:\n\n→ Not dreading the mirror every morning\n→ Walking into meetings without thinking about how tired you look\n→ Showing up fully — at work, with family, in photos\n\nOur clients always say the same thing after their first visit:\n\n"I wish I\'d done this sooner."\n\nNot because of how they look.\nBecause of how they feel.\n\nBook a free consultation. No pressure, no upsell. Just a conversation 👇',
+        hashtags: '#medspa #selfcare #confidenceboost #botoxresults #fillerresults #medspanearme #aesthetictreatments #glowtip #antiaging #youdeserveit'
+      }
+    ]
+  },
+
+  attorney: {
+    industry: 'Personal Injury Attorney',
+    scripts: [
+      {
+        num: '01',
+        title: "The Insurance Company's First Move",
+        pillar: 'The System (Education)',
+        emotion: 'Shock → Trust',
+        duration: '50-65 sec',
+        blocks: [
+          { label: 'HOOK', text: '"The insurance company is hoping you don\'t watch this video. Because what I\'m about to tell you will save you from making the most common — and most expensive — mistake after an accident."', type: 'hook' },
+          { label: 'BODY 1', text: '"Within 48 hours of your accident, an adjuster will call you. They\'ll be friendly. They\'ll ask how you\'re feeling. And then they\'ll offer you a check. It\'ll feel like relief. It isn\'t."', type: 'body' },
+          { label: 'REHOOK', text: '"Here\'s what that first offer actually means—"', type: 'rehook' },
+          { label: 'BODY 2', text: '"That check is designed to be accepted before you realize how injured you actually are. Symptoms from accidents — especially whiplash and soft tissue injuries — can take days or weeks to fully appear. Once you accept that check and sign the release? It\'s over. You can\'t go back."', type: 'body' },
+          { label: 'OUTRO', text: '"If you\'ve been in an accident — do not accept anything without speaking to an attorney first. Most of us offer free consultations. Use it."', type: 'body' },
+        ],
+        cta: 'Questions about your accident? Comment or DM — I answer everything. 👇',
+        caption: 'The insurance company hopes you don\'t see this.\n\nAfter your accident, an adjuster will call.\nThey\'ll be friendly. They\'ll offer you a check.\n\nDon\'t take it.\n\nHere\'s why:\n\nThat first offer is designed to be accepted before you know how injured you actually are. Symptoms can take weeks to appear. Sign the release and you\'re done — even if you\'re still in pain months from now.\n\nFree consultation. No obligation. Just know your rights.\n\nDM me or drop your question below 👇',
+        hashtags: '#personalinjury #caraccident #accidentlawyer #knowyourrights #injurylawyer #legaladvice #lawyertips #accidentclaim #insuranceclaim #piattorney'
+      },
+      {
+        num: '02',
+        title: '3 Things NOT to Say After an Accident',
+        pillar: 'The System (Education)',
+        emotion: 'Fear → Empowerment',
+        duration: '45-60 sec',
+        blocks: [
+          { label: 'HOOK', text: '"Three things you should never say after a car accident — that most people say every single time."', type: 'hook' },
+          { label: 'BODY 1', text: '"Number one: \'I\'m fine.\' Even if you feel okay in the moment, adrenaline masks pain. You don\'t actually know yet."', type: 'body' },
+          { label: 'REHOOK', text: '"Number two—"', type: 'rehook' },
+          { label: 'BODY 2', text: '"\'It was partly my fault.\' Even if you believe this, saying it at the scene can be used against you. Let the investigation determine fault — not your words in a stressful moment.\n\nNumber three: \'I don\'t need a lawyer.\' You never know what complications come up — medically or legally. A free consultation costs you nothing and protects everything."', type: 'body' },
+          { label: 'OUTRO', text: '"Save this. Share it with anyone who drives. Because the time to know this is before it happens, not after."', type: 'body' },
+        ],
+        cta: 'Save this and share it 👇 someone you know needs to see this.',
+        caption: '3 things NOT to say after a car accident:\n\n1. "I\'m fine" — adrenaline masks pain. You don\'t know yet.\n\n2. "It was partly my fault" — even if you believe it, saying this can be used against you. Let the investigation decide.\n\n3. "I don\'t need a lawyer" — a free consultation costs nothing and protects everything.\n\nSave this. Share it. Someone you know needs to see this before it happens to them.\n\nFree consultation — DM me anytime 👇',
+        hashtags: '#caraccident #accidenttips #personalinjury #legaladvice #knowyourrights #injurylawyer #accidentlawyer #drivingtips #safetytips #lawyersofinstagram'
+      },
+      {
+        num: '03',
+        title: 'Why People Lose Money They Were Owed',
+        pillar: 'The Business Case',
+        emotion: 'Outrage → Action',
+        duration: '50-65 sec',
+        blocks: [
+          { label: 'HOOK', text: '"Thousands of accident victims leave money on the table every year — not because they didn\'t have a case, but because they didn\'t know what they were owed."', type: 'hook' },
+          { label: 'BODY 1', text: '"Most people think a car accident claim covers the car damage and maybe the ER visit. But a full claim can include: lost wages, future medical treatment, emotional distress, loss of enjoyment of life, and long-term care if your injuries are permanent. Most people never claim half of what they\'re entitled to."', type: 'body' },
+          { label: 'REHOOK', text: '"Here\'s the part that hurts—"', type: 'rehook' },
+          { label: 'BODY 2', text: '"Insurance companies know this. They\'re counting on it. They settle fast, for less, before you realize the full scope of your injuries. A personal injury attorney\'s entire job is to make sure you don\'t get taken advantage of in that moment."', type: 'body' },
+          { label: 'OUTRO', text: '"Even if you\'ve already accepted a settlement — call me. Depending on the circumstances, it\'s not always over."', type: 'body' },
+        ],
+        cta: 'Know someone who settled fast after an accident? Share this with them 👇',
+        caption: 'Accident victims leave thousands on the table every year.\n\nNot because they didn\'t have a case.\nBecause they didn\'t know what they were owed.\n\nA full claim can include:\n→ Lost wages\n→ Future medical treatment\n→ Emotional distress\n→ Long-term care\n→ Loss of enjoyment of life\n\nInsurance companies settle fast — before you know the full scope.\n\nDon\'t let that be you.\n\nFree consultation. DM me anytime 👇',
+        hashtags: '#personalinjury #injuryclaim #accidentlawyer #knowyourrights #caraccidentlawyer #injurysettlement #pilaw #legaladvice #lawyertips #accidentclaim'
+      }
+    ]
+  },
+
+  realestate: {
+    industry: 'Real Estate',
+    scripts: [
+      {
+        num: '01',
+        title: 'The Listing That Sat for 90 Days',
+        pillar: 'Build in Public',
+        emotion: 'Empathy → Trust',
+        duration: '50-65 sec',
+        blocks: [
+          { label: 'HOOK', text: '"I had a listing sit on the market for 90 days. Same house. Same price. One change — and it sold in a week."', type: 'hook' },
+          { label: 'BODY 1', text: '"The house was fine. The price was competitive. But the photos were dark, the description was generic, and online, it looked like every other listing on the street. Buyers scrolling Zillow had no reason to stop."', type: 'body' },
+          { label: 'REHOOK', text: '"Here\'s what we changed—"', type: 'rehook' },
+          { label: 'BODY 2', text: '"Professional photography. A 3D walkthrough. A listing description that told the story of the home — the morning light in the kitchen, the neighborhood, what it actually feels like to live there. We gave buyers a reason to emotionally connect before they ever stepped inside."', type: 'body' },
+          { label: 'OUTRO', text: '"Your home\'s presentation is doing either one of two things: creating urgency or killing it. Which is yours doing?"', type: 'body' },
+        ],
+        cta: 'Thinking about selling? Drop your zip code and I\'ll tell you what\'s actually moving 👇',
+        caption: 'Same house. Same price. Sat for 90 days.\n\nOne change — sold in a week.\n\nThe photos were dark. The description was generic. Online, it looked like every other listing on the street.\n\nWe gave buyers a reason to emotionally connect before they walked in:\n→ Professional photography\n→ 3D walkthrough\n→ A listing description that told the STORY of the home\n\nPresentation creates urgency or kills it.\n\nWhich is yours doing?\n\nDrop your zip code — I\'ll tell you what\'s moving in your area 👇',
+        hashtags: '#realestateagent #homeselling #realestatetips #sellinghomes #realestatemarketing #listingagent #homesales #realtorlife #propertymarketing #realestate'
+      },
+      {
+        num: '02',
+        title: 'What First-Time Buyers Always Get Wrong',
+        pillar: 'The System (Education)',
+        emotion: 'Empathy → Empowerment',
+        duration: '50-65 sec',
+        blocks: [
+          { label: 'HOOK', text: '"First-time buyers make the same three mistakes — and they all cost money. Here\'s what nobody tells you before you start looking."', type: 'hook' },
+          { label: 'BODY 1', text: '"Mistake one: shopping before getting pre-approved. You find your dream home, fall in love, put in an offer — and get beaten by a buyer who was already approved. Your offer isn\'t competitive without that letter."', type: 'body' },
+          { label: 'REHOOK', text: '"Mistake two—"', type: 'rehook' },
+          { label: 'BODY 2', text: '"Skipping the inspection to win a bidding war. I understand the pressure. But waiving inspection means buying every hidden problem in that house — sight unseen.\n\nMistake three: buying at the top of your budget. Your max approval isn\'t your budget. Leave room for closing costs, repairs, and the fact that life happens."', type: 'body' },
+          { label: 'OUTRO', text: '"Save this. Share it with anyone you know who\'s about to start house hunting. The time to learn this is before you\'re in the middle of it."', type: 'body' },
+        ],
+        cta: 'Save this for when you\'re ready to buy 🏠 Questions? Drop them below 👇',
+        caption: '3 mistakes first-time buyers always make:\n\n1. Shopping before pre-approval → you lose every bidding war\n\n2. Waiving inspection → you buy every hidden problem in that house\n\n3. Buying at the top of your budget → leave room for closing costs, repairs, and life\n\nSave this. Share it with someone about to start looking.\n\nQuestions? I answer everything in the comments 👇',
+        hashtags: '#firsttimebuyer #realestatetips #homebuyingtips #realestate #homebuyer #mortgagetips #realestateadvice #househunting #buyingahome #realestateagent'
+      },
+      {
+        num: '03',
+        title: 'Why Waiting for the Market to Drop Is Costing You',
+        pillar: 'Hot Takes',
+        emotion: 'Tension → Clarity',
+        duration: '45-60 sec',
+        blocks: [
+          { label: 'HOOK', text: '"\'I\'m waiting for the market to drop\' is the most expensive sentence in real estate. Here\'s the math that most people don\'t run."', type: 'hook' },
+          { label: 'BODY 1', text: '"Let\'s say the home you want costs $400K today. You wait 18 months for prices to drop 10%. The home is now $360K — you saved $40K. But you paid $2,200/month in rent for 18 months. That\'s $39,600 in rent — gone. And rates might be higher."', type: 'body' },
+          { label: 'REHOOK', text: '"Now run the same math if prices go up instead—"', type: 'rehook' },
+          { label: 'BODY 2', text: '"If the home appreciates even 5% in those 18 months, it\'s now $420K. You\'ve paid $39K in rent AND the home costs more. Market timing almost never works. The best time to buy is when you can afford to and you\'re ready to stay."', type: 'body' },
+          { label: 'OUTRO', text: '"I\'m not here to pressure you into buying. I\'m here to make sure your decision is based on math, not fear."', type: 'body' },
+        ],
+        cta: 'Are you waiting for the market to drop? Tell me your situation 👇',
+        caption: '"I\'m waiting for the market to drop."\n\nThe most expensive sentence in real estate.\n\nThe math:\n→ Home costs $400K today\n→ You wait 18 months for a 10% drop → $360K\n→ You paid $2,200/month in rent → $39,600 gone\n→ You saved $400\n\nAnd if prices went UP instead?\nNow the home is $420K AND you paid $39K in rent.\n\nMarket timing almost never works.\n\nBuy when you can afford it and you\'re ready to stay.\n\nWhat\'s your situation? Drop it below 👇',
+        hashtags: '#realestatetips #housingmarket #homebuyingtips #realestateadvice #realestate #househunting #mortgagetips #investinginrealestate #realestateagent #marketupdate'
+      }
+    ]
+  },
+
+  roofing: {
+    industry: 'Roofing / Home Renovation',
+    scripts: [
+      {
+        num: '01',
+        title: 'Your Roof Is Leaking and You Don\'t Know It',
+        pillar: 'The System (Education)',
+        emotion: 'Fear → Action',
+        duration: '45-60 sec',
+        blocks: [
+          { label: 'HOOK', text: '"Your roof is leaking right now and you have no idea. Here\'s the one thing you can check in 30 seconds that could save you $10,000."', type: 'hook' },
+          { label: 'BODY 1', text: '"Slow leaks don\'t announce themselves. They drip behind walls, into insulation, and under flooring — silently — for months before you ever see a water stain on your ceiling. By then, you\'re looking at mold, structural damage, and a bill that\'s 10x what the repair would have cost."', type: 'body' },
+          { label: 'REHOOK', text: '"Here\'s the 30-second check—"', type: 'rehook' },
+          { label: 'BODY 2', text: '"Go to your attic after it rains. Look for wet insulation, dark staining on the wood, or any light coming through the roof decking. If you see any of those — you have a problem. Don\'t wait. A small fix today is a few hundred dollars. The same problem in 6 months could be tens of thousands."', type: 'body' },
+          { label: 'OUTRO', text: '"If you\'re not sure what you\'re looking at — film it and DM it to me. I\'ll tell you if you need to worry."', type: 'body' },
+        ],
+        cta: 'When did you last check your attic? 👇 DM me if you\'re not sure what you saw.',
+        caption: 'Your roof might be leaking right now.\nYou just can\'t see it yet.\n\nSlow leaks hide behind walls and in insulation for months. By the time you see a water stain? You\'re looking at mold and structural damage.\n\nThe 30-second check:\n→ Go to your attic after it rains\n→ Look for wet insulation\n→ Check for dark staining on wood\n→ Look for any light coming through the decking\n\nSmall fix today = a few hundred.\nSame problem in 6 months = tens of thousands.\n\nNot sure what you\'re seeing? DM me a video 👇',
+        hashtags: '#roofing #roofrepair #homeowners #rooftips #homerenovation #roofmaintenance #leakyrooftips #homerepair #preventivemaintenance #roofingcontractor'
+      },
+      {
+        num: '02',
+        title: 'How Contractors Rip You Off After a Storm',
+        pillar: 'Hot Takes',
+        emotion: 'Outrage → Trust',
+        duration: '50-65 sec',
+        blocks: [
+          { label: 'HOOK', text: '"After a major storm, contractors show up door to door offering \'free inspections.\' As a roofer, I\'m here to tell you: be very careful who you let on your roof."', type: 'hook' },
+          { label: 'BODY 1', text: '"Storm chasers — contractors who follow natural disasters looking for quick work — will find damage whether it exists or not. They create it, photograph it, and file an insurance claim on your behalf. You sign something thinking you\'re getting a free repair. You\'re actually signing away your insurance rights."', type: 'body' },
+          { label: 'REHOOK', text: '"Here\'s how to protect yourself—"', type: 'rehook' },
+          { label: 'BODY 2', text: '"Never let an unsolicited contractor on your roof. Get three quotes from established, local companies with actual reviews. Call your insurance company yourself — before any contractor does. And never sign an \'Assignment of Benefits\' form without understanding exactly what it means."', type: 'body' },
+          { label: 'OUTRO', text: '"Share this with a homeowner who just went through a storm. This is information most contractors don\'t want you to have."', type: 'body' },
+        ],
+        cta: 'Share this with a homeowner in your area 👇',
+        caption: 'After a storm, contractors show up with "free inspections."\n\nBe careful.\n\nStorm chasers create damage, photograph it, and file insurance claims. You sign something thinking you\'re getting a free repair — you\'re actually signing away your insurance rights.\n\nHow to protect yourself:\n→ Never let unsolicited contractors on your roof\n→ Get 3 quotes from local, established companies\n→ Call YOUR insurance company first — before any contractor\n→ Never sign an "Assignment of Benefits" without understanding it\n\nShare this with a homeowner in your area 👇',
+        hashtags: '#roofing #homeowners #stormchasers #roofscam #contractortips #homeimprovement #roofrepair #homeprotection #insuranceclaims #roofingtips'
+      },
+      {
+        num: '03',
+        title: 'Why I Tell Homeowners to Wait Before Replacing',
+        pillar: 'Build in Public',
+        emotion: 'Surprise → Trust',
+        duration: '45-60 sec',
+        blocks: [
+          { label: 'HOOK', text: '"I talked a homeowner out of a $15,000 roof replacement last week. Here\'s why — and why that makes me more money in the long run."', type: 'hook' },
+          { label: 'BODY 1', text: '"She called me in a panic. Her neighbor\'s contractor said she needed a full replacement. I got up there and found two small areas of damaged flashing and a few missing shingles. Total repair cost: $400. Her roof had 8-10 good years left."', type: 'body' },
+          { label: 'REHOOK', text: '"Here\'s the business lesson—"', type: 'rehook' },
+          { label: 'BODY 2', text: '"I could have taken the $15,000 job. She wouldn\'t have known. But now? She\'s referred me to four neighbors. She called me when she DID need a full replacement two years later. And she tells everyone: \'This is the one contractor who was actually honest with me.\' That $400 repair has made me over $80,000 in referrals."', type: 'body' },
+          { label: 'OUTRO', text: '"Honesty is the best business strategy. Especially in an industry with a reputation problem."', type: 'body' },
+        ],
+        cta: 'Know a homeowner who\'s been oversold? Share this 👇',
+        caption: 'I talked a homeowner out of a $15,000 roof replacement last week.\n\nHer neighbor\'s contractor said she needed a full replacement.\n\nI got up there: 2 areas of damaged flashing, a few missing shingles.\nRepair cost: $400. Roof had 8-10 years left.\n\nI could have taken the $15K job.\nShe would\'ve never known.\n\nInstead:\n→ She referred 4 neighbors\n→ She called me when she needed a real replacement\n→ That $400 job made me $80K+ in referrals\n\nHonesty is the best strategy.\nEspecially in an industry with a reputation problem.\n\nKnow a homeowner who\'s been oversold? Share this 👇',
+        hashtags: '#roofing #contractortips #honestcontractor #homeimprovement #roofingtips #roofer #homeowners #homerepair #localbusiness #roofinginspection'
+      }
+    ]
+  },
+
+  mortgage: {
+    industry: 'Mortgage / Lending',
+    scripts: [
+      {
+        num: '01',
+        title: 'The Mistake That Kills Deals at the Closing Table',
+        pillar: 'The System (Education)',
+        emotion: 'Fear → Action',
+        duration: '50-65 sec',
+        blocks: [
+          { label: 'HOOK', text: '"I\'ve watched deals fall apart at the closing table because of something the buyer did two weeks earlier — thinking it was totally fine."', type: 'hook' },
+          { label: 'BODY 1', text: '"You\'re under contract on your dream home. You\'re excited. You go out and finance a new car — or open a new credit card to buy furniture for the place. Makes sense, right? You\'re about to move in."', type: 'body' },
+          { label: 'REHOOK', text: '"Here\'s what actually happens—"', type: 'rehook' },
+          { label: 'BODY 2', text: '"Lenders pull your credit again right before closing. Any new debt changes your debt-to-income ratio. That can drop you below the approval threshold. I\'ve seen people lose their dream home over a $400/month car payment they made two weeks before closing. Do not open anything, finance anything, or move money around while you\'re in escrow. Not a single thing."', type: 'body' },
+          { label: 'OUTRO', text: '"Save this. Share this with anyone you know who\'s buying a home right now. This is the stuff they should have told you at the start."', type: 'body' },
+        ],
+        cta: 'Save this 🔖 — share it with a first-time buyer who needs to hear it.',
+        caption: 'Deals fall apart at the closing table over this all the time.\n\nBuyer goes under contract.\nThey finance a car — or open a credit card for new furniture.\nMakes sense. They\'re about to move in.\n\nThen:\nLender pulls credit again before closing.\nNew debt = new debt-to-income ratio.\nRatio too high = approval revoked.\n\nI\'ve watched people lose their home over a $400/month car payment made 2 weeks before closing.\n\nRule: Do NOT open, finance, or move money around while in escrow.\n\nSave this. Share it with a buyer who needs to hear it 👇',
+        hashtags: '#mortgagetips #firsttimebuyer #homebuyingtips #mortgagebroker #homeloan #homebuying #realestatetips #closingday #mortgageadvice #loanapproval'
+      },
+      {
+        num: '02',
+        title: 'Why Your Bank Is Not Your Friend for a Mortgage',
+        pillar: 'Hot Takes',
+        emotion: 'Surprise → Action',
+        duration: '45-60 sec',
+        blocks: [
+          { label: 'HOOK', text: '"Going to your bank for a mortgage is one of the most expensive mistakes a homebuyer makes. Here\'s why."', type: 'hook' },
+          { label: 'BODY 1', text: '"Your bank has a limited menu of products. They\'ll offer you their rates, their terms, and their programs. That\'s it. If you don\'t fit their box perfectly, they\'ll either deny you or give you a worse deal than you deserve."', type: 'body' },
+          { label: 'REHOOK', text: '"A mortgage broker works differently—"', type: 'rehook' },
+          { label: 'BODY 2', text: '"I have access to dozens of lenders competing for your business. That means I can find better rates, programs designed for your specific situation — self-employed, first-time buyer, lower credit score — and terms your bank doesn\'t even offer. And I get paid by the lender, not you."', type: 'body' },
+          { label: 'OUTRO', text: '"Before you sign anything with a bank — talk to a broker. It costs you nothing and could save you tens of thousands over the life of your loan."', type: 'body' },
+        ],
+        cta: 'Are you comparing your rate right now? DM me and I\'ll show you what else is out there 👇',
+        caption: 'Going to your bank for a mortgage? Expensive mistake.\n\nHere\'s why:\n\nYour bank only offers their products. You either fit their box or you get a worse deal.\n\nA mortgage broker has access to dozens of lenders competing for your business:\n→ Better rates\n→ Programs for your specific situation (self-employed, lower credit, first-time buyer)\n→ Terms your bank doesn\'t offer\n→ And I get paid by the lender, not you\n\nBefore you sign with a bank — talk to a broker.\nCosts you nothing. Could save you tens of thousands.\n\nDM me your current rate and I\'ll show you what else is out there 👇',
+        hashtags: '#mortgagebroker #mortgagetips #homeloan #homebuying #homebuyingtips #mortgageadvice #refinance #interestrates #firsttimebuyer #realestate'
+      },
+      {
+        num: '03',
+        title: 'The 20% Down Payment Myth',
+        pillar: 'Hot Takes',
+        emotion: 'Surprise → Relief',
+        duration: '45-60 sec',
+        blocks: [
+          { label: 'HOOK', text: '"You don\'t need 20% down to buy a home. And waiting until you have it might be the most expensive decision you ever make."', type: 'hook' },
+          { label: 'BODY 1', text: '"The 20% rule comes from a time when it was the only way to avoid PMI — private mortgage insurance. But today there are programs that let you buy with 3%, 3.5%, even 0% down — and still build equity while you would have been renting and saving."', type: 'body' },
+          { label: 'REHOOK', text: '"Here\'s the math that changes everything—"', type: 'rehook' },
+          { label: 'BODY 2', text: '"Let\'s say you need $80K for 20% down on a $400K home. Takes you 4 years to save it. Meanwhile, if you\'d bought with 5% down 4 years ago — $20K — and that home appreciated 5% per year, it\'s now worth $486K. You\'ve built $86K in equity while you were waiting to save your first $80K."', type: 'body' },
+          { label: 'OUTRO', text: '"Stop waiting for 20%. Let\'s figure out what you actually need and get you into a home."', type: 'body' },
+        ],
+        cta: 'How much do you think you need to buy? Drop it below — I\'ll tell you the truth 👇',
+        caption: 'You don\'t need 20% down.\n\nAnd waiting until you have it might be your most expensive mistake.\n\nThe math:\n\nIf you\'d bought with 5% down 4 years ago on a $400K home:\n→ You paid $20K to get in\n→ At 5% annual appreciation, the home is now $486K\n→ You built $86K in equity\n\nMeanwhile, the person "saving for 20%" just hit $80K.\n\nPrograms exist for 3%, 3.5%, even 0% down.\n\nStop waiting. Let\'s figure out what you actually need.\n\nHow much do you think you need? Drop it below 👇',
+        hashtags: '#mortgagetips #downpayment #firsttimebuyer #homebuyingtips #mortgagebroker #homeloan #realestate #homebuying #pmi #mortgageadvice'
+      }
+    ]
+  }
+};
+
+// ============================================================
+// RENDERING
+// ============================================================
+
+// Detect which pack to show from URL param: ?pack=medspa
+const urlParams = new URLSearchParams(window.location.search);
+const packKey = urlParams.get('pack') || 'medspa';
+const pack = PACKS[packKey] || PACKS.medspa;
+
+// Update cover
+document.getElementById('industryLabel').textContent = pack.industry;
+document.getElementById('industrySpan').textContent = pack.industry;
+document.getElementById('pageTitle').textContent = `Script Pack: ${pack.industry} — Create More Productions`;
+
+// Render scripts
+const container = document.getElementById('scriptsContainer');
+pack.scripts.forEach((s, idx) => {
+  const blocksHTML = s.blocks.map(b => `
+    <div class="script-block">
+      <div class="block-label ${b.type === 'rehook' ? 'rehook' : ''}">${b.label}</div>
+      <div class="block-text ${b.type === 'rehook' ? 'rehook' : ''}">${b.text}</div>
+    </div>
+  `).join('');
+
+  const page = document.createElement('div');
+  page.className = 'script-page';
+  page.innerHTML = `
+    <div class="script-num">Script ${s.num} of 03</div>
+    <div class="script-title">${s.title}</div>
+    <div class="script-meta">
+      <span class="meta-tag tag-pillar">${s.pillar}</span>
+      <span class="meta-tag tag-emotion">${s.emotion}</span>
+      <span class="meta-tag tag-duration">⏱ ${s.duration}</span>
+    </div>
+    <div class="script-divider"></div>
+    ${blocksHTML}
+    <div class="script-footer">
+      <div class="footer-grid">
+        <div class="footer-section">
+          <h4>Call to Action</h4>
+          <p>${s.cta}</p>
+        </div>
+        <div class="footer-section">
+          <h4>Hashtags</h4>
+          <p style="font-size:12px;color:#888;line-height:1.8;">${s.hashtags}</p>
+        </div>
+      </div>
+    </div>
+  `;
+  container.appendChild(page);
+});
+</script>
+</body>
+</html>
